@@ -11,7 +11,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def run_command(command):
+def run_command(command, raise_error: bool = True):
     """Prints or executes the command based on the selected mode."""
     if args.exec:
         try:
@@ -19,6 +19,9 @@ def run_command(command):
                 command, shell=True, check=True, text=True, capture_output=True
             )
             print(result.stdout.strip())
+            if raise_error:
+                result.check_returncode()
+            return result.returncode
         except subprocess.CalledProcessError as e:
             print(f"Error: {e.stderr}")
     else:
@@ -29,6 +32,9 @@ def show_status():
     """Displays the UFW status."""
     run_command("sudo ufw status verbose")
 
+def show_status_numbered():
+    """Displays the UFW status numbered."""
+    run_command("sudo ufw status numbered")
 
 def enable_ufw():
     """Enables UFW."""
@@ -72,11 +78,10 @@ def add_rule():
 
 def remove_rule():
     """Removes a rule by its rule number."""
-    show_status()
+    show_status_numbered()
     rule_number = input("\nEnter the rule number to delete: ")
     if not rule_number.isdigit():
         print("Invalid rule number!")
-
         return
     command = f"sudo ufw delete {rule_number}"
     run_command(command)

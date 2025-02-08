@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=UFW-terminal
+Comment=Runs ufw_terminal script
+Exec=gnome-terminal -- bash -c "python3 ~/GIT/ufw_terminal/ufw_terminal.py --exec; exec bash"
+Icon=utilities-terminal
+Terminal=true
+Categories=Utility;Application;

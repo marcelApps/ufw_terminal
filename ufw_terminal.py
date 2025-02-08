@@ -11,7 +11,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def run_command(command, raise_error: bool = True):
+def run_command(command: str, raise_error: bool = True) -> int:
     """Prints or executes the command based on the selected mode."""
     if args.exec:
         try:
@@ -19,13 +19,14 @@ def run_command(command, raise_error: bool = True):
                 command, shell=True, check=True, text=True, capture_output=True
             )
             print(result.stdout.strip())
-            if raise_error:
-                result.check_returncode()
             return result.returncode
         except subprocess.CalledProcessError as e:
+            if raise_error:
+                raise e
             print(f"Error: {e.stderr}")
     else:
         print(f"[SIMULATION MODE] {command}")
+        return 0
 
 
 def show_status():
@@ -46,7 +47,7 @@ def disable_ufw():
     run_command("sudo ufw disable")
 
 
-def choose_option(options, prompt):
+def choose_option(options: list, prompt: str):
     """Helper function for selecting a numeric option."""
     while True:
         print(prompt)

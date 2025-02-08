@@ -11,8 +11,9 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def run_command(command: str, raise_error: bool = True) -> int:
+def run_command(command: str, raise_error: bool = True, echo_true: bool = True) -> int:
     """Prints or executes the command based on the selected mode."""
+    command = f"{'echo "y" | ' if echo_true else ''}{command}"
     if args.exec:
         try:
             result = subprocess.run(

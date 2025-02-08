@@ -21,9 +21,9 @@ def run_command(command: str, raise_error: bool = True) -> int:
             print(result.stdout.strip())
             return result.returncode
         except subprocess.CalledProcessError as e:
+            print(f"Error: {e.stderr}")
             if raise_error:
                 raise e
-            print(f"Error: {e.stderr}")
     else:
         print(f"[SIMULATION MODE] {command}")
         return 0
